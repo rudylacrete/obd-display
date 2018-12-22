@@ -1,0 +1,20 @@
+{
+  "name": "test_node_elm327",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "bluetooth-obd": "^0.2.4"
+  },
+  "devDependencies": {
+    "electron": "^4.0.0",
+    "electron-rebuild": "^1.8.2"
+  },
+  "scripts": {
+    "start": "electron .",
+    "rebuild_deps:electron": "electron-rebuild",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
