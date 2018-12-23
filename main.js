@@ -15,7 +15,7 @@ function createWindow () {
   win.setFullScreen(true);
 
   // Ouvre les DevTools.
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   // Émit lorsque la fenêtre est fermée.
   win.on('closed', () => {

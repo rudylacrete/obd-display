@@ -15,7 +15,12 @@ ipcRenderer.send('listen-obd');
 
 var gaugeOptions = {  
   chart: {
-    type: 'solidgauge'
+    type: 'solidgauge',
+  },
+  navigation: {
+    buttonOptions: {
+      enabled: false
+    }
   },
   
   title: null,
@@ -34,6 +39,10 @@ var gaugeOptions = {
   },
   
   tooltip: {
+    enabled: false
+  },
+
+  credits: {
     enabled: false
   },
   
@@ -84,6 +93,12 @@ var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptio
       text: 'AFR'
     }
   },
+
+  navigation: {
+    buttonOptions: {
+      enabled: false
+    }
+  },
   
   credits: {
     enabled: false
@@ -110,6 +125,14 @@ const chartSpeedLine = Highcharts.chart('container-speed-line', {
     panning: true,
     panKey: 'shift',
     animation: false
+  },
+  navigation: {
+    buttonOptions: {
+      enabled: false
+    }
+  },
+  credits: {
+    enabled: false
   },
   title: {
     text: undefined
