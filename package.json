@@ -7,12 +7,12 @@
     "bluetooth-obd": "^0.2.4"
   },
   "devDependencies": {
-    "electron": "^4.0.0",
+    "electron": "3.0.13",
     "electron-rebuild": "^1.8.2"
   },
   "scripts": {
     "start": "electron .",
-    "rebuild_deps:electron": "electron-rebuild",
+    "rebuild_deps:electron": "electron-rebuild -f",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
