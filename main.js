@@ -52,6 +52,6 @@ app.on('activate', () => {
 ipcMain.on('listen-obd', (event, arg) => {
   console.log('Renderer process subscribe to ODB data', event.sender);
   odbEventBus.on('data', (data) => {
-    event.sender.send('odb-data', data);
+    event.sender.send('obd-data', data);
   });
 });

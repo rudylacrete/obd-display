@@ -6,11 +6,6 @@ require('highcharts/modules/exporting')(Highcharts);
 require('highcharts/highcharts-more')(Highcharts);
 require('highcharts/modules/solid-gauge')(Highcharts);
 
-// manage odb data listener pattern
-ipcRenderer.on('obd-data', (event, arg) => {
-  console.log(arg);
-});
-ipcRenderer.send('listen-obd');
 
 
 var gaugeOptions = {  
@@ -41,7 +36,7 @@ var gaugeOptions = {
   tooltip: {
     enabled: false
   },
-
+  
   credits: {
     enabled: false
   },
@@ -86,14 +81,14 @@ let afrData = [[(new Date()).getTime(), 11.9]];
 const MAX_POINTS = 50;
 var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
   yAxis: {
-    min: 5,
+    min: 0,
     max: 30,
     zIndex: 99,
     title: {
       text: 'AFR'
     }
   },
-
+  
   navigation: {
     buttonOptions: {
       enabled: false
@@ -160,30 +155,21 @@ const chartSpeedLine = Highcharts.chart('container-speed-line', {
     }
   }]
 });
+const afrPoint = chartSpeed.series[0].points[0];
+const afrLinePoints = chartSpeedLine.series[0];
+const addAfrPoint = (afrValue) => {
+  const newPoint = [(new Date()).getTime(), afrValue];
+  afrLinePoints.addPoint(newPoint);
+  // delete first point over MAX_POINTS
+  if(afrData.length > MAX_POINTS) afrLinePoints.data[0].remove();
+  afrPoint.update(Math.round(afrValue * 100) / 100, true, true, false);
+}
 
-
-// Bring life to the dials
-setInterval(function () {
-  // Speed
-  var point,
-  linePoints,
-  newVal,
-  inc;
-  
-  if (chartSpeed) {
-    point = chartSpeed.series[0].points[0];
-    linePoints = chartSpeedLine.series[0];
-    inc = Math.round((Math.random() * 25) + 5);
-    newVal = point.y + inc;
-    
-    if (newVal > 30) {
-      newVal = (point.y - inc) < 5 ? 5 : point.y - inc;
-    }
-
-    const newPoint = [(new Date()).getTime(), newVal];
-    linePoints.addPoint(newPoint);
-    // delete first point over MAX_POINTS
-    if(afrData.length > MAX_POINTS) linePoints.data[0].remove();
-    point.update(Math.round(newVal * 100) / 100, true, true, false);
+// manage odb data listener pattern
+ipcRenderer.on('obd-data', (event, arg) => {
+  console.log('receive data', arg);
+  if(arg.name == 'lambda') {
+    addAfrPoint(arg.value);
   }
-}, 500);
+});
+ipcRenderer.send('listen-obd');
