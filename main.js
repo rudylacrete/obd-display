@@ -11,6 +11,8 @@ function createWindow () {
 
   // et charge le index.html de l'application.
   win.loadFile('ui/index.html');
+  win.setMenu(null);
+  win.setFullScreen(true);
 
   // Ouvre les DevTools.
   win.webContents.openDevTools();
