@@ -1,18 +1,19 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron');
+const odbEventBus = require('./lib/odbEventBus');
 
 // Gardez une reference globale de l'objet window, si vous ne le faites pas, la fenetre sera
 // fermee automatiquement quand l'objet JavaScript sera garbage collected.
-let win
+let win;
 
 function createWindow () {
   // Créer le browser window.
-  win = new BrowserWindow({ width: 800, height: 600 })
+  win = new BrowserWindow({ width: 800, height: 600 });
 
   // et charge le index.html de l'application.
-  win.loadFile('index.html')
+  win.loadFile('ui/index.html');
 
   // Ouvre les DevTools.
-  win.webContents.openDevTools()
+  win.webContents.openDevTools();
 
   // Émit lorsque la fenêtre est fermée.
   win.on('closed', () => {
@@ -20,7 +21,7 @@ function createWindow () {
     // dans un tableau si votre application supporte le multi-fenêtre. C'est le moment
     // où vous devez supprimer l'élément correspondant.
     win = null
-  })
+  });
 }
 
 // Cette méthode sera appelée quant Electron aura fini
@@ -33,7 +34,7 @@ app.on('window-all-closed', () => {
   // Sur macOS, il est commun pour une application et leur barre de menu
   // de rester active tant que l'utilisateur ne quitte pas explicitement avec Cmd + Q
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
 });
 
@@ -43,4 +44,12 @@ app.on('activate', () => {
   if (win === null) {
     createWindow()
   }
+});
+
+// manage odb event listener pattern
+ipcMain.on('listen-obd', (event, arg) => {
+  console.log('Renderer process subscribe to ODB data', event.sender);
+  odbEventBus.on('data', (data) => {
+    event.sender.send('odb-data', data);
+  });
 });

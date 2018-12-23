@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="../node_modules/highcharts/css/highcharts.css" />
+  <link rel="stylesheet" type="text/css" href="./custom.css" />
+  <title>Hello World!</title>
+</head>
+<body>
+  <h1>Hello World!</h1>
+  Nous utilisons Node <script>document.write(process.versions.node)</script>,
+  Chrome <script>document.write(process.versions.chrome)</script>,
+  et Electron <script>document.write(process.versions.electron)</script>.
+  
+  <div style="width: 400px; height: 200px; margin: 0 auto">
+    <div id="container-speed" style="width: 300px; height: 200px; float: left"></div>
+  </div>
+
+  <div style="width: 600px; height: 200px; margin: 0 auto">
+    <div id="container-speed-line"></div>
+  </div>
+  
+</body>
+<script src="index.js"></script>
+</html>

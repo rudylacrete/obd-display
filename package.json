@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
-    "bluetooth-obd": "^0.2.4"
+    "bluetooth-obd": "^0.2.4",
+    "highcharts": "^7.0.1"
   },
   "devDependencies": {
     "electron": "3.0.13",
