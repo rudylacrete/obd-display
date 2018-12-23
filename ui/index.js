@@ -73,7 +73,8 @@ var gaugeOptions = {
 };
 
 // The AFR gauge
-const afrData = [[(new Date()).getTime(), 11.9]];
+let afrData = [[(new Date()).getTime(), 11.9]];
+const MAX_POINTS = 50;
 var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
   yAxis: {
     min: 5,
@@ -104,7 +105,14 @@ var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptio
 
 const chartSpeedLine = Highcharts.chart('container-speed-line', {
   chart: {
-    zoomType: 'x'
+    zoomType: 'x',
+    type: 'area',
+    panning: true,
+    panKey: 'shift',
+    animation: false
+  },
+  title: {
+    text: undefined
   },
   xAxis: {
     type: 'datetime'
@@ -117,37 +125,16 @@ const chartSpeedLine = Highcharts.chart('container-speed-line', {
   legend: {
     enabled: false
   },
-  plotOptions: {
-    area: {
-      fillColor: {
-        linearGradient: {
-          x1: 0,
-          y1: 0,
-          x2: 0,
-          y2: 1
-        },
-        stops: [
-          [0, Highcharts.getOptions().colors[0]],
-          [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-        ]
-      },
-      marker: {
-        radius: 2
-      },
-      lineWidth: 1,
-      states: {
-        hover: {
-          lineWidth: 1
-        }
-      },
-      threshold: null
-    }
-  },
   
   series: [{
-    type: 'area',
+    lineColor: Highcharts.getOptions().colors[1],
+    color: Highcharts.getOptions().colors[2],
+    fillOpacity: 0.5,
     name: 'AFR',
-    data: afrData
+    data: afrData,
+    marker: {
+      enabled: false
+    }
   }]
 });
 
@@ -170,10 +157,10 @@ setInterval(function () {
       newVal = (point.y - inc) < 5 ? 5 : point.y - inc;
     }
 
-    // delete first point over 100
-    if(afrData.length == 100) afrData.splice(0, 1);
-    afrData.push([(new Date()).getTime(), newVal]);
-    linePoints.setData(afrData);
-    point.update(newVal);
+    const newPoint = [(new Date()).getTime(), newVal];
+    linePoints.addPoint(newPoint);
+    // delete first point over MAX_POINTS
+    if(afrData.length > MAX_POINTS) linePoints.data[0].remove();
+    point.update(Math.round(newVal * 100) / 100, true, true, false);
   }
-}, 2000);
+}, 500);
